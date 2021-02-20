@@ -31,12 +31,15 @@ trends <- files %>%
 
 
 #Playing with Data
-Latest_Scorecard <- Latest_Scorecard %>% rename(schname = INSTNM)
-
 ID_Scorecard <- merge(x = name_link, y = Latest_Scorecard, by = c('UNITID', 'OPEID'), all.x = TRUE)
   
-scorecard_all <- merge(x = ID_Scorecard, y = trends, by = 'schname', all.x = TRUE) %>%
-  na.omit(scorecard_all)
+scorecard_all <- merge(x = ID_Scorecard, y = trends, by = 'schname', all.x = TRUE)
+
+scorecard_all <- scorecard_all %>% distinct(schname, .keep_all = TRUE)
+
+scorecard_all <- scorecard_all %>% select(-INSTNM)
+
+scorecard_all <- scorecard_all %>% na.omit()
 
 Data_To_Play_With <- scorecard_all %>%
   rename(med_earn = 'md_earn_wne_p10-REPORTED-EARNINGS') %>%
@@ -51,8 +54,11 @@ Data_To_Play_With <- Data_To_Play_With %>%
   
 median_earnings <- median(Data_To_Play_With$med_earn)
 
-##The data has a median of 40,700 which I will use to filter the high and low earnings.
+##The data has a median of 40,900 which I will use to filter the high and low earnings.
 
-Data_To_Play_With <- Data_To_Play_With %>%
+Standardized_Play <- Data_To_Play_With %>%
   group_by(keynum) %>%
-  summarise(sd_index = (index - mean(index)) / sd(index))
+  mutate(sd_index = (index - mean(index, na.rm = TRUE) / sd(index))) %>%
+  summarise(schname, keyword, monthorweek, keynum, med_earn, sd_index)
+  
+
