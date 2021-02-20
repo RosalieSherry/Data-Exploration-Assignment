@@ -4,6 +4,9 @@ library(tidyverse)
 library(jtools)
 library(car)
 library(readr)
+library(purrr)
+library(lubridate)
+
 
 '''The College Scorecard was released at the start of September 2015. 
 Among colleges that predominantly grant bachelor’s degrees, did it result in 
