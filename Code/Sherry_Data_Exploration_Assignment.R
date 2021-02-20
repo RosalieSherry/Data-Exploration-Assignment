@@ -62,5 +62,17 @@ Standardized_Play <- Data_To_Play_With %>%
   mutate(sd_index = (index - mean(index, na.rm = TRUE) / sd(index))) %>%
   summarise(schname, keyword, monthorweek, keynum, med_earn, sd_index)
 
-  
+B4Sept15 <- Standardized_Play %>% 
+  mutate(DATE = substr(monthorweek, 1, 10)) %>%
+  mutate(DATE = as.Date(DATE)) %>%
+  filter(DATE < '2015-09-01')
 
+AfterSept15 <- Standardized_Play %>% 
+  mutate(DATE = substr(monthorweek, 1, 10)) %>%
+  mutate(DATE = as.Date(DATE)) %>%
+  filter(DATE >= '2015-09-01')  
+
+m1 <- lm(data = B4Sept15, med_earn ~ sd_index)
+m2 <- lm(data = AfterSept15, med_earn ~ sd_index)
+
+export_summs(m1, m2)
