@@ -14,7 +14,7 @@ more student interest in high-earnings colleges relative to low-earnings ones
 Latest_Scorecard <- read_csv("Lab3_Rawdata/Most+Recent+Cohorts+(Scorecard+Elements).csv")
 
 name_link <- read_csv("Lab3_Rawdata/id_name_link.csv") %>% rename(OPEID = opeid) %>%
-  rename(UNITID = unitid)
+  rename(UNITID = unitid) %>% distinct(schname, .keep_all = TRUE)
 
 
 files <- list.files(path = 'Lab3_Rawdata', pattern = 'trends_up_to_')
@@ -35,8 +35,6 @@ ID_Scorecard <- merge(x = name_link, y = Latest_Scorecard, by = c('UNITID', 'OPE
   
 scorecard_all <- merge(x = ID_Scorecard, y = trends, by = 'schname', all.x = TRUE)
 
-scorecard_all <- scorecard_all %>% distinct(schname, .keep_all = TRUE)
-
 scorecard_all <- scorecard_all %>% select(-INSTNM)
 
 scorecard_all <- scorecard_all %>% na.omit()
@@ -54,11 +52,12 @@ Data_To_Play_With <- Data_To_Play_With %>%
   
 median_earnings <- median(Data_To_Play_With$med_earn)
 
-##The data has a median of 40,900 which I will use to filter the high and low earnings.
+##The data has a median of 41,800 which I will use to filter the high and low earnings.
 
 Standardized_Play <- Data_To_Play_With %>%
   group_by(keynum) %>%
   mutate(sd_index = (index - mean(index, na.rm = TRUE) / sd(index))) %>%
   summarise(schname, keyword, monthorweek, keynum, med_earn, sd_index)
+
   
 
