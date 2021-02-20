@@ -30,4 +30,14 @@ trends <- files %>%
 Latest_Scorecard <- Latest_Scorecard %>% rename(schname = INSTNM)
   
 scorecard_all <- merge(x = Latest_Scorecard, y = trends, by = "schname", all.x = TRUE)  
-###filter(PREDDEG == 3) %>% distinct(INSTNM, .keep_all = TRUE)
+
+Data_To_Play_With <- scorecard_all %>%
+  select('UNITID', 'OPEID', ,'schname', 'PREDDEG', 'keyword', 'monthorweek', 'keynum', 'index', 
+         'md_earn_wne_p10-REPORTED-EARNINGS') %>%
+  rename(med_earn = 'md_earn_wne_p10-REPORTED-EARNINGS') %>%
+  filter(PREDDEG == 3) %>%
+  filter(med_earn != 'NULL') %>%
+  filter(med_earn != 'PrivacySuppressed') %>%
+  mutate(med_earn = as.numeric(med_earn))
+  
+median(Data_To_Play_With$med_earn)
