@@ -13,6 +13,10 @@ more student interest in high-earnings colleges relative to low-earnings ones
 #Data
 Latest_Scorecard <- read_csv("Lab3_Rawdata/Most+Recent+Cohorts+(Scorecard+Elements).csv")
 
+name_link <- read_csv("Lab3_Rawdata/id_name_link.csv") %>% rename(OPEID = opeid) %>%
+  rename(UNITID = unitid)
+
+
 files <- list.files(path = 'Lab3_Rawdata', pattern = 'trends_up_to_')
 print(files)
 
@@ -28,16 +32,27 @@ trends <- files %>%
 
 #Playing with Data
 Latest_Scorecard <- Latest_Scorecard %>% rename(schname = INSTNM)
+
+ID_Scorecard <- merge(x = name_link, y = Latest_Scorecard, by = c('UNITID', 'OPEID'), all.x = TRUE)
   
-scorecard_all <- merge(x = Latest_Scorecard, y = trends, by = "schname", all.x = TRUE)  
+scorecard_all <- merge(x = ID_Scorecard, y = trends, by = 'schname', all.x = TRUE) %>%
+  na.omit(scorecard_all)
 
 Data_To_Play_With <- scorecard_all %>%
-  select('UNITID', 'OPEID', ,'schname', 'PREDDEG', 'keyword', 'monthorweek', 'keynum', 'index', 
-         'md_earn_wne_p10-REPORTED-EARNINGS') %>%
   rename(med_earn = 'md_earn_wne_p10-REPORTED-EARNINGS') %>%
   filter(PREDDEG == 3) %>%
   filter(med_earn != 'NULL') %>%
   filter(med_earn != 'PrivacySuppressed') %>%
   mutate(med_earn = as.numeric(med_earn))
+
+Data_To_Play_With <- Data_To_Play_With %>%
+  select('UNITID', 'OPEID', 'schname', 'PREDDEG', 'keyword', 'monthorweek', 'keynum', 'index',
+         'med_earn')
   
-median(Data_To_Play_With$med_earn)
+median_earnings <- median(Data_To_Play_With$med_earn)
+
+##The data has a median of 40,700 which I will use to filter the high and low earnings.
+
+Data_To_Play_With <- Data_To_Play_With %>%
+  group_by(keynum) %>%
+  summarise(sd_index = (index - mean(index)) / sd(index))
