@@ -59,8 +59,8 @@ median_earnings <- median(Data_To_Play_With$med_earn)
 
 Standardized_Play <- Data_To_Play_With %>%
   group_by(keynum) %>%
-  mutate(sd_index = (index - mean(index, na.rm = TRUE) / sd(index))) %>%
-  summarise(schname, CONTROL, keyword, monthorweek, keynum, med_earn, sd_index)
+  summarise(sd_index = (index - mean(index)) / sd(index), schname, CONTROL, 
+            keyword, monthorweek, keynum, med_earn, sd_index)
 
 #High versus Low Earnings
 
@@ -77,7 +77,14 @@ AfterSept15 <- Standardized_Play %>%
   mutate(DATE = as.Date(DATE)) %>%
   filter(DATE >= '2015-09-01')  
 
-m1 <- lm(data = B4Sept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
+m1 <- lm(data = B4Sept15, med_earn ~ sd_index)
 m2 <- lm(data = AfterSept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
 
 export_summs(m1, m2)
+
+#Keeping this because this was pretty funny
+scatter.smooth(x=B4Sept15$sd_index, y=B4Sept15$med_earn, main="med_earn ~ sd_index") 
+
+summary(m1)
+with(B4Sept15, plot(sd_index, med_earn))
+abline(0, 1)
