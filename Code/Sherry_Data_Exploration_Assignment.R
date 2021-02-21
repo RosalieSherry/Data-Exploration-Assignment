@@ -119,6 +119,18 @@ ggplot(data = PNPB4Sept15, aes(sd_index, med_earn)) +
 ggplot(data = PublicAfterSept15, aes(sd_index, med_earn)) +
   geom_smooth() + ggtitle("Private Non-Profit School After Sept 15")
 
+#Before September 15
+hist(B4Sept15$med_earn)
+hist(NoPublicB4Sept15$med_earn)
+hist(PublicB4Sept15$med_earn)
+hist(PNPB4Sept15$med_earn)
 
-ggplot(B4Sept15, aes(x = sd_index, y = med_earn, colour = CONTROL)) +
-  geom_quantile()
+#Sept15 & After
+
+hist(AfterSept15$med_earn)
+hist(NoPublicB4Sept15$med_earn)
+hist(PublicAfterSept15$med_earn)
+hist(PNPAfterSept15$med_earn)
+
+
+#A Little More Play Time
