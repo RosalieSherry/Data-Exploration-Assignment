@@ -77,7 +77,7 @@ AfterSept15 <- Standardized_Play %>%
   mutate(DATE = as.Date(DATE)) %>%
   filter(DATE >= '2015-09-01')  
 
-m1 <- lm(data = B4Sept15, med_earn ~ sd_index)
+m1 <- lm(data = B4Sept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
 m2 <- lm(data = AfterSept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
 
 export_summs(m1, m2)
@@ -85,6 +85,40 @@ export_summs(m1, m2)
 #Keeping this because this was pretty funny
 scatter.smooth(x=B4Sept15$sd_index, y=B4Sept15$med_earn, main="med_earn ~ sd_index") 
 
-summary(m1)
-with(B4Sept15, plot(sd_index, med_earn))
-abline(0, 1)
+ggplot(data = B4Sept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("All School Before Sept 15")
+
+ggplot(data = AfterSept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("All School After Sept 15")
+
+NoPublicB4Sept15 <- B4Sept15 %>% filter(CONTROL != 1)  
+
+NoPublicAfterSept15 <- AfterSept15 %>% filter(CONTROL != 1)
+
+ggplot(data = NoPublicB4Sept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Private School Before Sept 15")
+
+ggplot(data = NoPublicAfterSept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Private School After Sept 15")
+
+PublicB4Sept15 <- B4Sept15 %>% filter(CONTROL == 1) 
+PublicAfterSept15 <- AfterSept15 %>% filter(CONTROL == 1)
+
+ggplot(data = PublicB4Sept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Public School Before Sept 15")
+
+ggplot(data = PublicAfterSept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Public School After Sept 15")
+
+PNPB4Sept15 <- B4Sept15 %>% filter(CONTROL == 2) 
+PNPAfterSept15 <- AfterSept15 %>% filter(CONTROL == 2)
+
+ggplot(data = PNPB4Sept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Private Non-Profit School Before Sept 15")
+
+ggplot(data = PublicAfterSept15, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Private Non-Profit School After Sept 15")
+
+
+ggplot(B4Sept15, aes(x = sd_index, y = med_earn, colour = CONTROL)) +
+  geom_quantile()
