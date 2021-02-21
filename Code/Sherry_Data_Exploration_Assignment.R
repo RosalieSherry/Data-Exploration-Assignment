@@ -6,12 +6,13 @@ library(car)
 library(readr)
 library(purrr)
 library(lubridate)
+library(estimatr)
 
 
-'''The College Scorecard was released at the start of September 2015. 
-Among colleges that predominantly grant bachelor’s degrees, did it result in 
-more student interest in high-earnings colleges relative to low-earnings ones 
-(as proxied by Google searches for keywords associated with those colleges)?'''
+###The College Scorecard was released at the start of September 2015. 
+###Among colleges that predominantly grant bachelor’s degrees, did it result in 
+###more student interest in high-earnings colleges relative to low-earnings ones 
+###(as proxied by Google searches for keywords associated with those colleges)?
 
 #Data
 Latest_Scorecard <- read_csv("Lab3_Rawdata/Most+Recent+Cohorts+(Scorecard+Elements).csv")
@@ -85,8 +86,8 @@ export_summs(m1, m2)
 #Keeping this because this was pretty funny
 scatter.smooth(x=B4Sept15$sd_index, y=B4Sept15$med_earn, main="med_earn ~ sd_index") 
 
-'''This section was a massive Rosalie needs to visualize to know where to go next, 
-all these models are saved but ultimately they are not worth your time.'''
+###This section was a massive Rosalie needs to visualize to know where to go next, 
+###all these models are saved but ultimately they are not worth your time.'''
 
 ggplot(data = B4Sept15, aes(sd_index, med_earn)) +
   geom_smooth() + ggtitle("All School Before Sept 15")
@@ -210,3 +211,71 @@ ggplot(data = LowEarnAfterSept, aes(sd_index)) +
 ggplot(data = HighEarnAfterSept, aes(sd_index)) +
   geom_histogram(fill = 'pink') +
   facet_grid(CONTROL ~ .) + ggtitle('High Earn After September')
+
+ah1 <- lm(data = HighEarnBeforeSept, sqrt(med_earn) ~ sd_index + factor(CONTROL))
+ah2 <- lm(data = LowEarnBeforeSept, sqrt(med_earn) ~ sd_index + factor(CONTROL))
+ah3 <- lm(data = HighEarnAfterSept, sqrt(med_earn) ~ sd_index + factor(CONTROL))
+ah4 <- lm(data = LowEarnAfterSept, sqrt(med_earn) ~ sd_index + factor(CONTROL))
+
+export_summs(ah1, ah2, ah3, ah4)
+plot_coefs(ah1, ah2, ah3, ah4)
+
+ggplot(data = HighEarnBeforeSept, aes(sd_index, sqrt(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt High Earning Before September")
+
+ggplot(data = LowEarnBeforeSept, aes(sd_index, sqrt(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt Low Earning Before September")
+
+ggplot(data = HighEarnAfterSept, aes(sd_index, sqrt(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt High Earning After September")
+
+ggplot(data = LowEarnAfterSept, aes(sd_index, sqrt(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt Low Earning After September")
+
+woohoo1 <- lm(data = HighEarnBeforeSept, log(med_earn) ~ sd_index + factor(CONTROL))
+woohoo2 <- lm(data = LowEarnBeforeSept, log(med_earn) ~ sd_index + factor(CONTROL))
+woohoo3 <- lm(data = HighEarnAfterSept, log(med_earn) ~ sd_index + factor(CONTROL))
+woohoo4 <- lm(data = LowEarnAfterSept, log(med_earn) ~ sd_index + factor(CONTROL))
+
+export_summs(woohoo1, woohoo2, woohoo3, woohoo4)
+plot_coefs(woohoo1, woohoo2, woohoo3, woohoo4)
+
+ggplot(data = HighEarnBeforeSept, aes(sd_index, log(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt High Earning Before September")
+
+ggplot(data = LowEarnBeforeSept, aes(sd_index, log(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt Low Earning Before September")
+
+ggplot(data = HighEarnAfterSept, aes(sd_index, log(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt High Earning After September")
+
+ggplot(data = LowEarnAfterSept, aes(sd_index, log(med_earn))) +
+  geom_smooth() + ggtitle("Sqrt Low Earning After September")
+
+yahoo1 <- lm(data = HighEarnBeforeSept, med_earn ~ sd_index + (sd_index^2) + factor(CONTROL))
+yahoo2 <- lm(data = LowEarnBeforeSept, med_earn ~ sd_index + (sd_index^2) + factor(CONTROL))
+yahoo3 <- lm(data = HighEarnAfterSept, med_earn ~ sd_index + (sd_index^2) + factor(CONTROL))
+yahoo4<- lm(data = LowEarnAfterSept, med_earn ~ sd_index + (sd_index^2) + factor(CONTROL))
+
+export_summs(yahoo1, yahoo2, yahoo3, yahoo4)
+plot_coefs(yahoo1, yahoo2, yahoo3, yahoo4)
+
+last1 <- lm(data = HighEarnBeforeSept, med_earn ~ sd_index^3 + factor(CONTROL))
+last2 <- lm(data = LowEarnBeforeSept, med_earn ~ sd_index^3 + factor(CONTROL))
+last3 <- lm(data = HighEarnAfterSept, med_earn ~ sd_index^3 + factor(CONTROL))
+last4<- lm(data = LowEarnAfterSept, med_earn ~ sd_index^3 + factor(CONTROL))
+
+export_summs(last1, last2, last3, last4)
+plot_coefs(last1, last2, last3, last4)
+
+ggplot(data = HighEarnBeforeSept, aes(sd_index^(1/3), med_earn)) +
+  geom_smooth() + ggtitle("Cubed Root High Earning Before September")
+
+ggplot(data = LowEarnBeforeSept, aes(sd_index^(1/3), med_earn)) +
+  geom_smooth() + ggtitle("Cubed Root Low Earning Before September")
+
+ggplot(data = HighEarnAfterSept, aes(sd_index^(1/3), med_earn)) +
+  geom_smooth() + ggtitle("Cubed Root High Earning After September")
+
+ggplot(data = LowEarnAfterSept, aes(sd_index^(1/3), med_earn)) +
+  geom_smooth() + ggtitle("Cubed Root Low Earning After September")
