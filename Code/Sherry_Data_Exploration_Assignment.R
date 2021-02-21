@@ -85,6 +85,9 @@ export_summs(m1, m2)
 #Keeping this because this was pretty funny
 scatter.smooth(x=B4Sept15$sd_index, y=B4Sept15$med_earn, main="med_earn ~ sd_index") 
 
+'''This section was a massive Rosalie needs to visualize to know where to go next, 
+all these models are saved but ultimately they are not worth your time.'''
+
 ggplot(data = B4Sept15, aes(sd_index, med_earn)) +
   geom_smooth() + ggtitle("All School Before Sept 15")
 
@@ -133,4 +136,77 @@ hist(PublicAfterSept15$med_earn)
 hist(PNPAfterSept15$med_earn)
 
 
-#A Little More Play Time
+#A Little More Play Time - aka back to business
+ModelTime <- Standardized_Play
+ModelTime <- ModelTime %>%
+  mutate(DATE = substr(monthorweek, 1, 10)) %>%
+  mutate(DATE = as.Date(DATE))
+
+ModelTime$AfterS15 <- ifelse(ModelTime$DATE >= '2015-09-01', 1, 0)
+
+#WOOHOO LETS SEE WHAT WE CAN DO
+
+HighEarnBeforeSept <- ModelTime %>%
+  filter(High_Earn == 1) %>%
+  filter(AfterS15 == 0)
+
+LowEarnBeforeSept <- ModelTime %>%
+  filter(High_Earn == 0) %>%
+  filter(AfterS15 == 0)
+
+m3 <- lm(data = HighEarnBeforeSept, med_earn ~ sd_index)
+m4 <- lm(data = LowEarnBeforeSept, med_earn ~ sd_index)
+
+export_summs(m3, m4)
+
+HighEarnAfterSept <- ModelTime %>%
+  filter(High_Earn == 1) %>%
+  filter(AfterS15 == 1)
+
+LowEarnAfterSept <- ModelTime %>%
+  filter(High_Earn == 0) %>%
+  filter(AfterS15 == 1)
+
+m5 <- lm(data = HighEarnAfterSept, med_earn ~ sd_index)
+m6 <- lm(data = LowEarnAfterSept, med_earn ~ sd_index)
+
+export_summs(m3, m4, m5, m6)
+
+moo1 <- lm(data = HighEarnBeforeSept, med_earn ~ sd_index + factor(CONTROL))
+moo2 <- lm(data = LowEarnBeforeSept, med_earn ~ sd_index + factor(CONTROL))
+moo3 <- lm(data = HighEarnAfterSept, med_earn ~ sd_index + factor(CONTROL))
+moo4<- lm(data = LowEarnAfterSept, med_earn ~ sd_index + factor(CONTROL))
+
+export_summs(moo1, moo2, moo3, moo4)
+plot_coefs(moo1, moo2, moo3, moo4)
+
+linearHypothesis(moo1, 'sd_index = 0', white.adjust = TRUE)
+
+#What Do I WANT
+Earn_High <- ModelTime %>%
+  filter(High_Earn == 1) 
+
+Earn_Low <- ModelTime %>%
+  filter(High_Earn == 0)
+
+ggplot(data = Earn_High, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Just High Earning")
+
+ggplot(data = Earn_Low, aes(sd_index, med_earn)) +
+  geom_smooth() + ggtitle("Just Low Earning")
+
+ggplot(data = LowEarnBeforeSept, aes(sd_index)) +
+  geom_histogram(fill = 'blue') +
+  facet_grid(CONTROL ~ .) + ggtitle('Low Earn Before September')
+
+ggplot(data = HighEarnBeforeSept, aes(sd_index)) +
+  geom_histogram(fill = 'red') +
+  facet_grid(CONTROL ~ .) + ggtitle('High Earn Before September')
+
+ggplot(data = LowEarnAfterSept, aes(sd_index)) +
+  geom_histogram(fill = 'purple') +
+  facet_grid(CONTROL ~ .) + ggtitle('Low Earn After September')
+
+ggplot(data = HighEarnAfterSept, aes(sd_index)) +
+  geom_histogram(fill = 'pink') +
+  facet_grid(CONTROL ~ .) + ggtitle('High Earn After September')
