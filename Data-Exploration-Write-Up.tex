@@ -1,0 +1,934 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Data Translation Write Up},
+  pdfauthor={Rosalie Sherry},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{array}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{ulem}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{calc}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{wrapfig}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Data Translation Write Up}
+\author{Rosalie Sherry}
+\date{2/20/2021}
+
+\begin{document}
+\maketitle
+
+\hypertarget{the-assignment}{%
+\subsection{The Assignment}\label{the-assignment}}
+
+You don't have to write a lot here. Just make an RMarkdown file that
+performs your analysis and displays the results, and in which you
+explain your analysis.
+
+Be sure to:
+
+Include at least one regression and one graph Explain why you are
+performing the analysis you are performing, and the choices you made in
+putting it together Explain how your analysis addresses the research
+question Any additional analyses you did that led you to design your
+main analysis that way (i.e.~``I graphed Y vs.~X and it looked nonlinear
+so I added a polynomial term'' - you could even include this additional
+analysis if you like) Explain what we should conclude, in real world
+terms, based on your results There's no minimum or maximum length. I
+expect most analyses will be somewhere around two pages of text
+
+library(jtools) library(tidyverse) library(png)
+
+\hypertarget{including-plots}{%
+\subsection{Including Plots}\label{including-plots}}
+
+When you go through my code (or perhaps my repository) you will see that
+my code goes through a lot of changes and adjustment. I first had to
+tidy the data which was the most time consuming portion of this project.
+After it took me a long time to figure out how to play with the data, I
+knew that I was regressing earnings and my index variable.
+
+First, I choose what was ``high'' earning and ``low'' earning based on
+what the median income was of the median income group. That number is
+41,800. Which I save as ``median\_earnings'' and also shoutout in the
+code. So if it was greater than or equal to 41,800 it was grouped as
+``high'' and everything else was ``low''. Next, standardizing the Index
+number was done by using the demeaning approach we learned last week.
+Index - mean(index). This was to bring everything in close together so
+the data was easier to work with.
+
+Now that I had gotten to being able to work with the data it was time to
+get down to the nitty gritty and actually start interpreting it. I had a
+variety of issues with this, I could not decide whether to control for
+University type or whether to filter by university type. So I ran
+regressions based on both. I did not want to ignore university type
+because I have my own bias that I assume others have as well. And by
+this I mean, I chose to go to Gonzaga over the University of Washington
+for undergrad for a variety of reasons but one major factor is that I
+assumed (and was told by those giving me advice) that private schools
+have better alumni networks and with that goes better job opportunities.
+So in part, I wanted to test whether or not this was true but I also
+wanted to make sure I was looking at each entity as individuals in case
+there was any externalities such as what I had listed that might throw
+my testing.
+
+I then ran approximately 8,000,000 regressions and did a lot of
+different graphing to see what worked, what didn't, and what I should
+pay attention to. Should Control be filtered to University type or
+should I use it as a factor? What do all these regressions show me?
+Approximately none of them were linear when I ran them and so I played
+around with the equation. I played around with squaring, the squareroot,
+and log functions but when looking at the data nothing looked as linear
+(still not entirely linear) as the regular function. I ended by trying
+to cube it and cuberoot the data I think a highlight is my ``cubed root
+high earning after september'' which is a perfect horizontal line with a
+giant margin of error. This obviously did not work out.
+
+I looked at distributions and one that was particular interesting to me
+was the one I titled ``High Earn After September'' which splits the
+distributions between school types (1 being Public, 2 Private
+Non-Profit, and 3 Private For-Profit). This shows the data appearing to
+be normnally distributed for Public and Private Non-Profit institutions
+that were high earning after the release of the college scorecard where
+as Private For Profit is skewed to the right.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{source}\NormalTok{(}\StringTok{"Code/Sherry\_Data\_Exploration\_Assignment.R"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.3.3     v purrr   0.3.4
+## v tibble  3.0.5     v dplyr   1.0.3
+## v tidyr   1.1.2     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: carData
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'car'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     recode
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     some
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'lubridate'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   .default = col_character(),
+##   UNITID = col_double(),
+##   OPEID = col_double(),
+##   opeid6 = col_double(),
+##   HCM2 = col_double(),
+##   PREDDEG = col_double(),
+##   CONTROL = col_double(),
+##   CURROPER = col_double()
+## )
+## i Use `spec()` for the full column specifications.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   unitid = col_double(),
+##   opeid = col_double(),
+##   schname = col_character()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+##  [1] "trends_up_to_finish.csv"    "trends_up_to_inter_1.csv"  
+##  [3] "trends_up_to_inter_2.csv"   "trends_up_to_inter_3.csv"  
+##  [5] "trends_up_to_inter_4.csv"   "trends_up_to_inter_5.csv"  
+##  [7] "trends_up_to_inter_6.csv"   "trends_up_to_UM.csv"       
+##  [9] "trends_up_to_UPhoenix.csv"  "trends_up_to_UT.csv"       
+## [11] "trends_up_to_UTMB.csv"      "trends_up_to_Yorktowne.csv"
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 16 parsing failures.
+##  row col  expected    actual                                   file
+## 1561  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_finish.csv'
+## 1562  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_finish.csv'
+## 1563  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_finish.csv'
+## 1564  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_finish.csv'
+## 1565  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_finish.csv'
+## .... ... ......... ......... ......................................
+## See problems(...) for more details.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 2 parsing failures.
+##    row   col expected                                                  actual                                    file
+## 150976 schid a double Rising searches for cuny kingsborough community college 'Lab3_Rawdata/trends_up_to_inter_1.csv'
+## 150977 schid a double cuny jobs                                               'Lab3_Rawdata/trends_up_to_inter_1.csv'
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 888 parsing failures.
+##  row col  expected    actual                                    file
+## 1094  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_3.csv'
+## 1095  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_3.csv'
+## 1096  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_3.csv'
+## 1097  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_3.csv'
+## 1098  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_3.csv'
+## .... ... ......... ......... .......................................
+## See problems(...) for more details.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+## 
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 996 parsing failures.
+##  row col  expected    actual                                    file
+## 1093  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_5.csv'
+## 1094  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_5.csv'
+## 1095  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_5.csv'
+## 1096  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_5.csv'
+## 1097  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_5.csv'
+## .... ... ......... ......... .......................................
+## See problems(...) for more details.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: 964 parsing failures.
+##  row col  expected    actual                                    file
+## 3279  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_6.csv'
+## 3280  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_6.csv'
+## 3281  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_6.csv'
+## 3282  -- 6 columns 2 columns 'Lab3_Rawdata/trends_up_to_inter_6.csv'
+## 3283  -- 6 columns 5 columns 'Lab3_Rawdata/trends_up_to_inter_6.csv'
+## .... ... ......... ......... .......................................
+## See problems(...) for more details.
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+## 
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+## 
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+## 
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+## 
+## 
+## -- Column specification --------------------------------------------------------
+## cols(
+##   schid = col_double(),
+##   schname = col_character(),
+##   keyword = col_character(),
+##   keynum = col_double(),
+##   monthorweek = col_character(),
+##   index = col_double()
+## )
+\end{verbatim}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'keynum'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in checkMatrixPackageVersion(): Package version inconsistency detected.
+## TMB was built with Matrix version 1.2.18
+## Current Matrix version is 1.3.2
+## Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package
+\end{verbatim}
+
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-1.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-2.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-3.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-4.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-5.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-6.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-7.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-8.pdf}
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-9.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ HighEarnAfterSept, }\KeywordTok{aes}\NormalTok{(sd\_index}\OperatorTok{\^{}}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{), med\_earn)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom\_smooth}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Cubed Root High Earning After September"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 48760 rows containing non-finite values (stat_smooth).
+\end{verbatim}
+
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-10.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ HighEarnAfterSept, }\KeywordTok{aes}\NormalTok{(sd\_index)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom\_histogram}\NormalTok{(}\DataTypeTok{fill =} \StringTok{\textquotesingle{}pink\textquotesingle{}}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet\_grid}\NormalTok{(CONTROL }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{.) }\OperatorTok{+}\StringTok{ }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}High Earn After September\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-11.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{moo1 \textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ HighEarnBeforeSept, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(CONTROL))}
+\NormalTok{moo2 \textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ LowEarnBeforeSept, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(CONTROL))}
+\NormalTok{moo3 \textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ HighEarnAfterSept, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(CONTROL))}
+\NormalTok{moo4\textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ LowEarnAfterSept, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(CONTROL))}
+
+\KeywordTok{export\_summs}\NormalTok{(moo1, moo2, moo3, moo4)}
+\end{Highlighting}
+\end{Shaded}
+
+ 
+  \providecommand{\huxb}[2]{\arrayrulecolor[RGB]{#1}\global\arrayrulewidth=#2pt}
+  \providecommand{\huxvb}[2]{\color[RGB]{#1}\vrule width #2pt}
+  \providecommand{\huxtpad}[1]{\rule{0pt}{#1}}
+  \providecommand{\huxbpad}[1]{\rule[-#1]{0pt}{#1}}
+
+\begin{table}[ht]
+\begin{centerbox}
+\begin{threeparttable}
+ \label{tab:pressure}
+\setlength{\tabcolsep}{0pt}
+\begin{tabular}{l l l l l}
+
+
+\hhline{>{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 1 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 2 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 3 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 4 \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{255, 255, 255}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} (Intercept) \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 49808.75 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 36394.43 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 49813.23 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 36405.40 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (28.96)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (11.78)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (60.45)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (24.67)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} sd\_index \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 209.73 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 348.37 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 51.22~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 296.69 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (17.39)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (7.72)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (38.21)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (16.37)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} factor(CONTROL)2 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 2871.80 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -1534.54 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 2900.75 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -1501.25 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (37.65)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (16.02)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (78.43)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (33.24)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} factor(CONTROL)3 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 2800.93 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -3446.96 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 2897.74 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} -3364.78 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (58.30)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (32.67)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (122.26)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (68.60)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{255, 255, 255}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} N \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 377921~~~~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 376111~~~~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 87537~~~~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 87374~~~~~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} R2 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.02~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.04~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.02~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.04~~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}-}
+\arrayrulecolor{black}
+
+\multicolumn{5}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  *** p $<$ 0.001;  ** p $<$ 0.01;  * p $<$ 0.05. \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+\end{tabular}
+\end{threeparttable}\par\end{centerbox}
+
+\end{table}
+ 
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_coefs}\NormalTok{(moo1, moo2, moo3, moo4)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/pressure-12.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{linearHypothesis}\NormalTok{(moo3, }\StringTok{\textquotesingle{}sd\_index = 0\textquotesingle{}}\NormalTok{, }\DataTypeTok{white.adjust =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear hypothesis test
+## 
+## Hypothesis:
+## sd_index = 0
+## 
+## Model 1: restricted model
+## Model 2: med_earn ~ sd_index + factor(CONTROL)
+## 
+## Note: Coefficient covariance matrix supplied.
+## 
+##   Res.Df Df      F Pr(>F)
+## 1  87534                 
+## 2  87533  1 1.4177 0.2338
+\end{verbatim}
+
+I then started focusing more on my equation and Hypothesis, I split them
+up into multiple different categories again I factor the institution
+type and left out other types of controls because of how the graphs
+look. These are also the types I looked at their distributions for and
+found them to be mostly normal distribution. Here I played around with
+Hypothesis testing and found that we would fail to reject the null at
+the 5\% for ``moo3'' that sd\_index = 0. I choose this model to test
+because it was the only one that had an element that was not
+statistically significant when I ran export\_summs and also when
+plotting coefficients its sd\_index had the closest one to the estimate.
+Thereby, I was not surprised that an estimate of 0 would be failed to
+reject when I ran it, but I wanted to be safe.
+
+So now that I've gone over everything that doesn't work and provided no
+answers lets get to the real answer. Judging by everything I looked at,
+the Private For Profit universities had major highs and lows and just in
+general brought with themselves a whole bundle of error. So I filtered
+out those out and left just Private Non-Profit and Public Bachelor
+Degree granting institutions because those were the most normally
+distributed. After running a lot of models splitting my regressions
+between High and Low earning I realized that was something I needed to
+add to the model. As much as I find interesting the public versus
+private discussion its not what you're asking (plus running a million
+regressions it does look like private non-profits in fact due just
+produce more high earners for a myraid of things this data set doesn't
+have but alas a project for another day) so I did not filter out
+university type. So below you will see the models I ended with for
+before and after september 15. For before September 2015 looks like for
+every 1 standardized index score increase the median income of a
+graduate after 10 years will increase by 229. High\_Earning Universities
+will add 15,944 to those who graduate. For AFTER September 2015 for
+every 1 standardized index score increase the median income of a
+graduate after 10 years will increase by 139. High Earning Universities
+will add 15,971 to those who graduate. Based on my Hypothesis with the
+college scorecard (standardized) equalling 0 we can reject the null
+meaning that the college scorecard does make a difference in students
+college decisions and based off of the positive effect that high
+earnings makes on this project it also results more positively for high
+earning colleges versus negative ones.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{NoForProfitB4September15 \textless{}{-}}\StringTok{ }\NormalTok{B4Sept15 }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(CONTROL }\OperatorTok{!=}\StringTok{ }\DecValTok{3}\NormalTok{)}
+
+\NormalTok{NoForProfitAfterSeptember15 \textless{}{-}}\StringTok{ }\NormalTok{AfterSept15 }\OperatorTok{\%\textgreater{}\%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(CONTROL }\OperatorTok{!=}\DecValTok{3}\NormalTok{)}
+
+\NormalTok{final1 \textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ NoForProfitB4September15, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\NormalTok{High\_Earn)}
+\NormalTok{final2 \textless{}{-}}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ NoForProfitAfterSeptember15, med\_earn }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{sd\_index }\OperatorTok{+}\StringTok{ }\NormalTok{High\_Earn)}
+
+\KeywordTok{export\_summs}\NormalTok{(final1, final2)}
+\end{Highlighting}
+\end{Shaded}
+
+ 
+  \providecommand{\huxb}[2]{\arrayrulecolor[RGB]{#1}\global\arrayrulewidth=#2pt}
+  \providecommand{\huxvb}[2]{\color[RGB]{#1}\vrule width #2pt}
+  \providecommand{\huxtpad}[1]{\rule{0pt}{#1}}
+  \providecommand{\huxbpad}[1]{\rule[-#1]{0pt}{#1}}
+
+\begin{table}[ht]
+\begin{centerbox}
+\begin{threeparttable}
+ \label{tab:unnamed-chunk-1}
+\setlength{\tabcolsep}{0pt}
+\begin{tabular}{l l l}
+
+
+\hhline{>{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 1 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{c!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\centering \hspace{6pt} Model 2 \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{255, 255, 255}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} (Intercept) \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 35561.37 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 35567.17 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (14.57)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (30.46)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} sd\_index \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 229.85 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 139.36 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (10.41)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (22.29)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} High\_Earn \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 15944.38 *** \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 15971.00 *** \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (20.91)~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} (43.47)~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{255, 255, 255}{0.4}}->{\huxb{0, 0, 0}{0.4}}->{\huxb{0, 0, 0}{0.4}}-}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} N \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 685009~~~~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 159116~~~~~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+
+\multicolumn{1}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt} R2 \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.46~~~~ \hspace{6pt}\huxbpad{6pt}} &
+\multicolumn{1}{r!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedleft \hspace{6pt} 0.46~~~~ \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{>{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}->{\huxb{0, 0, 0}{0.8}}-}
+\arrayrulecolor{black}
+
+\multicolumn{3}{!{\huxvb{0, 0, 0}{0}}l!{\huxvb{0, 0, 0}{0}}}{\huxtpad{6pt + 1em}\raggedright \hspace{6pt}  *** p $<$ 0.001;  ** p $<$ 0.01;  * p $<$ 0.05. \hspace{6pt}\huxbpad{6pt}} \tabularnewline[-0.5pt]
+
+
+\hhline{}
+\arrayrulecolor{black}
+\end{tabular}
+\end{threeparttable}\par\end{centerbox}
+
+\end{table}
+ 
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot\_coefs}\NormalTok{(final1, final2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Data-Exploration-Write-Up_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{linearHypothesis}\NormalTok{(final1, }\StringTok{\textquotesingle{}sd\_index = 0\textquotesingle{}}\NormalTok{, }\DataTypeTok{white.adjust =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear hypothesis test
+## 
+## Hypothesis:
+## sd_index = 0
+## 
+## Model 1: restricted model
+## Model 2: med_earn ~ sd_index + High_Earn
+## 
+## Note: Coefficient covariance matrix supplied.
+## 
+##   Res.Df Df      F    Pr(>F)    
+## 1 685007                        
+## 2 685006  1 405.86 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{linearHypothesis}\NormalTok{(final2, }\StringTok{\textquotesingle{}sd\_index = 0\textquotesingle{}}\NormalTok{, }\DataTypeTok{white.adjust =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear hypothesis test
+## 
+## Hypothesis:
+## sd_index = 0
+## 
+## Model 1: restricted model
+## Model 2: med_earn ~ sd_index + High_Earn
+## 
+## Note: Coefficient covariance matrix supplied.
+## 
+##   Res.Df Df      F    Pr(>F)    
+## 1 159114                        
+## 2 159113  1 33.502 7.131e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\end{document}

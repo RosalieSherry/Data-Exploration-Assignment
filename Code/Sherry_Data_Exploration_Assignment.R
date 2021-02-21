@@ -78,8 +78,8 @@ AfterSept15 <- Standardized_Play %>%
   mutate(DATE = as.Date(DATE)) %>%
   filter(DATE >= '2015-09-01')  
 
-m1 <- lm(data = B4Sept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
-m2 <- lm(data = AfterSept15, med_earn ~ sd_index + High_Earn + factor(CONTROL))
+m1 <- lm(data = B4Sept15, med_earn ~ sd_index + factor(CONTROL))
+m2 <- lm(data = AfterSept15, med_earn ~ sd_index + factor(CONTROL))
 
 export_summs(m1, m2)
 
@@ -181,7 +181,7 @@ moo4<- lm(data = LowEarnAfterSept, med_earn ~ sd_index + factor(CONTROL))
 export_summs(moo1, moo2, moo3, moo4)
 plot_coefs(moo1, moo2, moo3, moo4)
 
-linearHypothesis(moo1, 'sd_index = 0', white.adjust = TRUE)
+linearHypothesis(moo3, 'sd_index = 0', white.adjust = TRUE)
 
 #What Do I WANT
 Earn_High <- ModelTime %>%
@@ -279,3 +279,20 @@ ggplot(data = HighEarnAfterSept, aes(sd_index^(1/3), med_earn)) +
 
 ggplot(data = LowEarnAfterSept, aes(sd_index^(1/3), med_earn)) +
   geom_smooth() + ggtitle("Cubed Root Low Earning After September")
+
+
+#I think the answer section
+NoForProfitB4September15 <- B4Sept15 %>%
+  filter(CONTROL != 3)
+
+NoForProfitAfterSeptember15 <- AfterSept15 %>%
+  filter(CONTROL !=3)
+
+final1 <- lm(data = NoForProfitB4September15, med_earn ~ sd_index + High_Earn)
+final2 <- lm(data = NoForProfitAfterSeptember15, med_earn ~ sd_index + High_Earn)
+
+export_summs(final1, final2)
+plot_coefs(final1, final2)
+
+linearHypothesis(final1, 'sd_index = 0', white.adjust = TRUE)
+linearHypothesis(final2, 'sd_index = 0', white.adjust = TRUE)
