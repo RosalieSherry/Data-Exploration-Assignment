@@ -1,0 +1,82 @@
+---
+title: "Data Translation Write Up"
+author: "Rosalie Sherry"
+date: "2/20/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Assignment
+You don’t have to write a lot here. Just make an RMarkdown file that performs your analysis and displays the results, and in which you explain your analysis.
+
+Be sure to:
+
+Include at least one regression and one graph
+Explain why you are performing the analysis you are performing, and the choices you made in putting it together
+Explain how your analysis addresses the research question
+Any additional analyses you did that led you to design your main analysis that way (i.e. “I graphed Y vs. X and it looked nonlinear so I added a polynomial term” - you could even include this additional analysis if you like)
+Explain what we should conclude, in real world terms, based on your results
+There’s no minimum or maximum length. I expect most analyses will be somewhere around two pages of text
+
+library(jtools)
+library(tidyverse)
+library(png)
+
+## Including Plots
+
+When you go through my code (or perhaps my repository) you will see that my code goes through a lot of changes and adjustment. I first had to tidy the data which was the most time consuming portion of this project. After it took me a long time to figure out how to play with the data, I knew that I was regressing earnings and my index variable. 
+
+First, I choose what was "high" earning and "low" earning based on what the median income was of the median income group. That number is 41,800. Which I save as "median_earnings" and also shoutout in the code. So if it was greater than or equal to 41,800 it was grouped as "high" and everything else was "low". 
+Next, standardizing the Index number was done by using the demeaning approach we learned last week. Index - mean(index). This was to bring everything in close together so the data was easier to work with.
+
+Now that I had gotten to being able to work with the data it was time to get down to the nitty gritty and actually start interpreting it. I had a variety of issues with this, I could not decide whether to control for University type or whether to filter by university type. So I ran regressions based on both. I did not want to ignore university type because I have my own bias that I assume others have as well. And by this I mean, I chose to go to Gonzaga over the University of Washington for undergrad for a variety of reasons but one major factor is that I assumed (and was told by those giving me advice) that private schools have better alumni networks and with that goes better job opportunities. So in part, I wanted to test whether or not this was true but I also wanted to make sure I was looking at each entity as individuals in case there was any externalities such as what I had listed that might throw my testing. 
+
+I then ran approximately 8,000,000 regressions and did a lot of different graphing to see what worked, what didn't, and what I should pay attention to. Should Control be filtered to University type or should I use it as a factor? What do all these regressions show me? Approximately none of them were linear when I ran them and so I played around with the equation. I played around with squaring, the squareroot, and log functions but when looking at the data nothing looked as linear (still not entirely linear) as the regular function. I ended by trying to cube it and cuberoot the data I think a highlight is my "cubed root high earning after september" which is a perfect horizontal line with a giant margin of error. This obviously did not work out. 
+
+I looked at distributions and one that was particular interesting to me was the one I titled "High Earn After September" which splits the distributions between school types (1 being Public, 2 Private Non-Profit, and 3 Private For-Profit). This shows the data appearing to be normnally distributed for Public and Private Non-Profit institutions that were high earning after the release of the college scorecard where as Private For Profit is skewed to the right. 
+
+```{r pressure, echo=TRUE}
+
+source("Code/Sherry_Data_Exploration_Assignment.R")
+
+ggplot(data = HighEarnAfterSept, aes(sd_index^(1/3), med_earn)) +
+  geom_smooth() + ggtitle("Cubed Root High Earning After September")
+
+ggplot(data = HighEarnAfterSept, aes(sd_index)) +
+  geom_histogram(fill = 'pink') +
+  facet_grid(CONTROL ~ .) + ggtitle('High Earn After September')
+
+
+moo1 <- lm(data = HighEarnBeforeSept, med_earn ~ sd_index + factor(CONTROL))
+moo2 <- lm(data = LowEarnBeforeSept, med_earn ~ sd_index + factor(CONTROL))
+moo3 <- lm(data = HighEarnAfterSept, med_earn ~ sd_index + factor(CONTROL))
+moo4<- lm(data = LowEarnAfterSept, med_earn ~ sd_index + factor(CONTROL))
+
+export_summs(moo1, moo2, moo3, moo4)
+plot_coefs(moo1, moo2, moo3, moo4)
+
+linearHypothesis(moo3, 'sd_index = 0', white.adjust = TRUE)
+```
+I then started focusing more on my equation and Hypothesis, I split them up into multiple different categories again I factor the institution type and left out other types of controls because of how the graphs look. These are also the types I looked at their distributions for and found them to be mostly normal distribution. Here I played around with Hypothesis testing and found that we would fail to reject the null at the 5% for "moo3" that sd_index = 0. I choose this model to test because it was the only one that had an element that was not statistically significant when I ran export_summs and also when plotting coefficients its sd_index had the closest one to the estimate. Thereby, I was not surprised that an estimate of 0 would be failed to reject when I ran it, but I wanted to be safe. 
+
+So now that I've gone over everything that doesn't work and provided no answers lets get to the real answer. Judging by everything I looked at, the Private For Profit universities had major highs and lows and just in general brought with themselves a whole bundle of error. So I filtered out those out and left just Private Non-Profit and Public Bachelor Degree granting institutions because those were the most normally distributed. After running a lot of models splitting my regressions between High and Low earning I realized that was something I needed to add to the model. As much as I find interesting the public versus private discussion its not what you're asking (plus running a million regressions it does look like private non-profits in fact due just produce more high earners for a myraid of things this data set doesn't have but alas a project for another day) so I did not filter out university type. So below you will see the models I ended with for before and after september 15. For before September 2015 looks like for every 1 standardized index score increase the median income of a graduate after 10 years will increase by 229. High_Earning Universities will add 15,944 to those who graduate. For AFTER September 2015 for every 1 standardized index score increase the median income of a graduate after 10 years will increase by 139. High Earning Universities will add 15,971 to those who graduate. Based on my Hypothesis with the college scorecard (standardized) equalling 0 we can reject the null meaning that the college scorecard does make a difference in students college decisions and based off of the positive effect that high earnings makes on this project it also results more positively for high earning colleges versus negative ones. 
+```{r}
+NoForProfitB4September15 <- B4Sept15 %>%
+  filter(CONTROL != 3)
+
+NoForProfitAfterSeptember15 <- AfterSept15 %>%
+  filter(CONTROL !=3)
+
+final1 <- lm(data = NoForProfitB4September15, med_earn ~ sd_index + High_Earn)
+final2 <- lm(data = NoForProfitAfterSeptember15, med_earn ~ sd_index + High_Earn)
+
+export_summs(final1, final2)
+plot_coefs(final1, final2)
+
+linearHypothesis(final1, 'sd_index = 0', white.adjust = TRUE)
+linearHypothesis(final2, 'sd_index = 0', white.adjust = TRUE)
+```
+
